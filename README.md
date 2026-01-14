@@ -57,14 +57,14 @@ Angelina Project — это **пользовательская оболочка*
 - **API Gateway** — единая точка входа для backend (Spring Cloud Gateway)
 - **Core-service** — работа с пользователями, счетами, подписками
 - **Backoffice-service** — управление платформой и стратегиями
-- **Notification-service** — отправка уведомлений (Kafka → Telegram/Email)
+- **Notification-service** — отправка уведомлений (RabbitMQ → Telegram/Email)
 - **Report-service** — асинхронная генерация торговых отчётов
 
 **Инфраструктура:**
 - Keycloak — аутентификация и авторизация (OAuth2, JWT)
 - PostgreSQL — основная база данных
 - Redis — кэш (котировки)
-- Kafka — шина событий (уведомления, отчёты)
+- RabbitMQ — брокер событий (уведомления, отчёты)
 
 ---
 
@@ -99,15 +99,15 @@ Angelina Project — это **пользовательская оболочка*
 | Scorpion API       | Dronehive / Smart   | gRPC        |
 | Dronehive          | Brokers / Exchanges | REST / gRPC |
 | Smart-service      | Exchanges           | REST / gRPC |
-| Notification       | Telegram / Email    | Kafka       |
-| Report-service     | Core-service        | Kafka       |
+| Notification       | Telegram / Email    | RabbitMQ    |
+| Report-service     | Core-service        | RabbitMQ    |
 
 ---
 
 ## Технологии
 
 - **Java 21, Spring Boot, Spring WebFlux, Spring Cloud**
-- **PostgreSQL, Redis** - хранение данных
+- **PostgreSQL, TimescaleDB, Redis** - хранение данных
 - **Apache Kafka** - event-driving
 - **gRPC, REST API, WebSockets**
 - **Keycloak (OAuth2, JWT)**
@@ -123,7 +123,7 @@ Angelina Project — это **пользовательская оболочка*
 ### Минимальные требования
 - JDK 21
 - Gradle
-- Docker Compose (Postgres, Redis, Keycloak, Kafka, Ollama, Loki, Grafana, Prometheus)
+- Docker Compose (Postgres, TimescaleDB, Redis, Keycloak, RabbitMQ, Ollama, Loki, Grafana, Prometheus)
 
 ### Сборка
 ```bash
