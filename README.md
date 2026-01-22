@@ -1,167 +1,142 @@
+[RU](README.ru.md)
+
 <img src="./docs/logo-readme.png" style="max-width:256px;">
 
----
-## `ANGELINA TRADING PLATFORM`
+# Angelina Trading Platform
 
-### `powered by SCORPION Engine`
+**Angelina Trading Platform** is the ecosystem for automating stock trading and analyzing market data, focused on algorithmic, strategy-based trading and reduced human error in decision-making.
 
----
-**Автоматизированная B2C платформа для торговли и анализа на фондовом рынке**
-
----
-## Общая концепция
-
-Angelina Project — это **пользовательская оболочка** (UI, управление, уведомления, админка) над отдельным высокопроизводительным движком — **Scorpion Engine**, который отвечает за торговые стратегии, анализ и риск-менеджмент.
-
-Таким образом, проект состоит из **двух связанных частей**:
-
-1. **Angelina Project** — пользовательский сервис (B2C):
-    - UI (веб-интерфейс + Telegram)
-    - работа с пользователями, счетами и подписками
-    - администрирование и управление стратегиями
-    - уведомления и отчётность
-
-2. **Scorpion Engine** — торговый движок (B2B/B2C):
-    - технический и фундаментальный анализ
-    - автоматизация стратегий
-    - исполнение сделок
-    - управление подписками на автоматическую торговлю
-    - риск-менеджмент
+The system is built around a high-performance trading core, **Scorpion Engine**, which handles strategy execution, analysis, and risk controls.
 
 ---
 
-## Основной функционал
+## Overview
 
-### Пользовательские возможности (Core):
-- Регистрация и вход через Keycloak
-- Подключение брокерского счёта через API-ключ
-- Подписка на торговые стратегии
-- Автоматизация сделок по выбранной стратегии
-- Получение сигналов и уведомлений (Telegram, Email)
-- Просмотр котировок и торговой статистики
-- Асинхронная генерация отчётов (XLSX)
+The platform is designed to simplify access to automated trading, to make it user-friendly for a wide audience — from retail users to experienced traders,
+while keeping users fully in control of their broker accounts and funds.
 
-### Административные возможности (Backoffice):
-- Управление ролями пользователей
-- Модерация стратегий и аналитиков
-- Управление сущностями (счета, подписки, сделки)
-- Аудит действий
+Manual trading is often driven by emotions: fear, greed, hesitation, and impulsive decisions.  
+Even experienced traders make mistakes when emotions interfere with strategy execution.
+
+Angelina Trading Platform was created to address this problem by providing structured, repeatable, and transparent trading automation based on predefined strategies.
+
+Users connect their existing broker accounts via API keys, select strategies, and enable automated trading — without transferring funds or assets to the platform, or just receive trading signals.
 
 ---
 
-## Архитектура
+## Core Idea
 
-### Angelina Project (оболочка)
-- **UI-MVC** — временный UI на Thymeleaf
-- **Telegram-bot** — уведомления и базовые действия
-- **API Gateway** — единая точка входа для backend (Spring Cloud Gateway)
-- **Core-service** — работа с пользователями, счетами, подписками
-- **Backoffice-service** — управление платформой и стратегиями
-- **Notification-service** — отправка уведомлений (RabbitMQ → Telegram/Email)
-- **Report-service** — асинхронная генерация торговых отчётов
+The basic principles of the platform are:
 
-**Инфраструктура:**
-- Keycloak — аутентификация и авторизация (OAuth2, JWT)
-- PostgreSQL — основная база данных
-- Redis — кэш (котировки)
-- RabbitMQ — брокер событий (уведомления, отчёты)
+- **Algorithmic strategy-first trading**, without emotions
+- **Controlled automation** of the entire trading process, from analysis and search for entry points to trade execution and exit
+- **No custody** — funds always remain with the broker
+- **Clear separation** between user access and trading logic
+
+Automation is not positioned as a replacement for understanding risk, but as a tool to enforce discipline and consistency.
 
 ---
 
----
+## Platform Structure
+
+### Angelina Trading Platform
+The umbrella ecosystem providing access to automated trading functionality and strategy-based workflows.
+
+It consists of two major components:
+
+### Angelina Platform
+The service and access layer responsible for:
+- user accounts and subscriptions
+- strategy selection and configuration
+- broker account connection via user-provided API keys
+- notifications, reporting, and system feedback
+- administrative and operational control
+
+Angelina Platform does **not** execute trades directly.
+
+### Scorpion Engine
+A high-performance trading core responsible for:
+- strategy execution
+- market data processing
+- trade orchestration via broker APIs
+- risk management logic
+
+Scorpion Engine is designed as a standalone trading engine and may be offered as an independent API-based product in the future.
 
 <img src="./docs/scorpion-logo.png" style="max-width:192px; width:192px;">
 
-### Scorpion Engine (движок)
-- **Scorpion API** — фасад и API движка
-- **Dronehive-service** — исполнение стратегий, управление потоками-дронами
-- **Smart-service** — технический анализ и генерация сигналов
-- **Analytical-service** — фундаментальный анализ (Spring AI, Ollama) *(будущий сервис)*
-- **Risk-management-service** — управление рисками *(будущий сервис)*
+---
+## User Experience & Onboarding
 
-**Интеграции:**
-- Stock Exchange APIs — рыночные данные (REST/WebSocket/gRPC)
-- Broker APIs — совершение сделок (REST/WebSocket/gRPC)
-- PostgreSQL — основная база данных
-- Redis — кэш (критерии, анализ, подписки)
+Key UX principles:
+- minimalistic interface without unnecessary noise
+- step-by-step onboarding flows
+- detailed guides for broker API key setup
+- clear explanations at every critical stage
+
+---
+## Trading Modes
+
+The platform supports the following interaction options to accommodate different user preferences:
+
+- **Sandbox (Paper Trading)**  
+  Strategy evaluation without real trade execution, using simulated orders and realistic performance metrics.
+
+- **Signal-Based Trading**  
+  Users receive trading signals and make execution decisions manually.
+
+- **Automated Trading**  
+  Strategies can be executed automatically via broker APIs using user-provided credentials.
 
 ---
 
-## Коммуникации
+## Trading Instruments
 
-| Откуда             | Куда                | Протокол    |
-|--------------------|---------------------|-------------|
-| UI / Telegram      | API Gateway         | REST        |
-| API Gateway        | Keycloak            | OAuth2      |
-| API Gateway        | Core / Backoffice   | REST        |
-| Core-service       | Scorpion API        | REST        |
-| Backoffice-service | Scorpion API        | REST        |
-| Scorpion API       | Dronehive / Smart   | gRPC        |
-| Dronehive          | Brokers / Exchanges | REST / gRPC |
-| Smart-service      | Exchanges           | REST / gRPC |
-| Notification       | Telegram / Email    | RabbitMQ    |
-| Report-service     | Core-service        | RabbitMQ    |
+**Currently focused on:**
+- Stocks
+
+**Planned support:**
+- ETFs
+- Derivatives (futures)
+- FX instruments
+
+Support for additional instruments is introduced gradually with appropriate risk controls and execution constraints.
 
 ---
 
-## Технологии
+## Architecture Philosophy
 
-- **Java 21, Spring Boot, Spring WebFlux, Spring Cloud**
-- **PostgreSQL, TimescaleDB, Redis** - хранение данных
-- **Apache Kafka** - event-driving
-- **gRPC, REST API, WebSockets**
-- **Keycloak (OAuth2, JWT)**
-- **Micrometer, Prometheus, Loki, Grafana** — мониторинг
-- **DL4J, Spring AI, Ollama** — анализ и ML
-- **Thymeleaf** — временный UI
-- **Telegram API** — Телеграм-бот
+Angelina Trading Platform follows a modular, service-oriented architecture with a strict separation of responsibilities.
+
+User access, configuration, and orchestration are isolated from execution, analysis, and market interaction logic.  
+This approach improves scalability, fault isolation, and long-term extensibility.
 
 ---
 
-## Запуск
+## Project Status
 
-### Минимальные требования
-- JDK 21
-- Gradle
-- Docker Compose (Postgres, TimescaleDB, Redis, Keycloak, RabbitMQ, Ollama, Loki, Grafana, Prometheus)
+The project is under active development.
 
-### Сборка
-```bash
-./mvnw clean package
-//TODO
-```
-
-### Запуск через Docker Compose (dev)
-
-```bash
-docker-compose up -d
-//TODO
-```
+- Current stage: **Pre-MVP**
+- Initial focus: stock trading automation
+- Future direction: strategy marketplace and standalone engine access
 
 ---
 
+## Disclaimer
 
-Документация и схемы находятся здесь:
+Angelina Trading Platform does not hold user funds, provide brokerage services, or offer investment advice.
 
-- [Архитектура (PDF + диаграммы)](./docs/architecture.md)
-- [Structurizr DSL](./docs/dsl/workspace.dsl)
-- [Диаграммы (PNG)](./docs/png/)
-- [Презентация (PDF)](./docs/pdf/architecture.pdf)
-
+All trades are executed via third-party brokers using user-provided API keys.  
+Users retain full control over their accounts, strategies, and trading decisions.
 
 ---
-## Будущие планы
 
-* Маркетплейс стратегий с рейтингами
-* Расширенный фундаментальный анализ (Analytical-service)
-* Риск-менеджмент (Risk-service)
-* Push-уведомления и моб. клиент
-* Переписывание UI на React/Vue
-* B2B интеграция: использование Scorpion Engine как отдельного продукта
+## Author
 
----
-**Разработка и архитектура:** ***Stanislav Kuprienko*** ©
----
+**Architecture and development:** Stanislav Kuprienko
+
+Angelina Trading Platform is built as a long-term project focused on algorithmic trading, transparency, and scalable automation.
 
 ### ® Angelina ###
 
