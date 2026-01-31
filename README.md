@@ -134,7 +134,9 @@ Users retain full control over their accounts, strategies, and trading decisions
 
 ## Author
 
-**Architecture and development:** Stanislav Kuprienko
+**Architecture and development:** 
+#### Stanislav Kuprienko
+[Telegram](https://t.me/Stas_Kuprienko)
 
 Angelina Trading Platform is built as a long-term project focused on algorithmic trading, transparency, and scalable automation.
 
